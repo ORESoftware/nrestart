@@ -6,9 +6,13 @@ import * as procs from './procs';
 import {killProcess} from './helpers';
 import log from './logger';
 
-log.error(process.argv);
+// log.error(process.argv);
 
-log.error(process.env.jjj);
+const crosstermIndex = process.env.crossterm_index;
+const crosstermJSON = crosstermIndex ? process.env['crossterm_val_' + crosstermIndex] : '[]';
+
+// log.error(process.env.crossterm_index);
+// log.error({crosstermJSON});
 
 const index = process.argv.indexOf('--');
 
@@ -20,8 +24,7 @@ const args = process.argv.slice(index + 1);
 
 const additionalArgs = (function(): Array<any>{
     try{
-      log.warn(process.env.ocmda);
-      return JSON.parse(process.env.ocmda);
+      return JSON.parse(crosstermJSON);
     }
     catch(err){
       log.error(err);

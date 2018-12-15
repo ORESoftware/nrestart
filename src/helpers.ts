@@ -36,7 +36,7 @@ export const killProcess = (proc: ChildProcess, cb: EVCb<any>) => {
           proc.kill('SIGKILL');
         }
         cb(null, null);
-      }, 1500);
+      }, 800);
       
     }, 500);
     
