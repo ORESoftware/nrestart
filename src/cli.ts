@@ -6,6 +6,10 @@ import * as procs from './procs';
 import {killProcess} from './helpers';
 import log from './logger';
 
+log.error(process.argv);
+
+log.error(process.env.jjj);
+
 const index = process.argv.indexOf('--');
 
 if (index < 2) {
@@ -13,6 +17,17 @@ if (index < 2) {
 }
 
 const args = process.argv.slice(index + 1);
+
+const additionalArgs = (function(): Array<any>{
+    try{
+      log.warn(process.env.ocmda);
+      return JSON.parse(process.env.ocmda);
+    }
+    catch(err){
+      log.error(err);
+      return [];
+    }
+})();
 
 const startProcess = () => {
   
@@ -30,7 +45,7 @@ const startProcess = () => {
   // k.stdout.pipe(process.stdout);
   // k.stderr.pipe(process.stderr);
   
-  k.stdin.end(args.join(' '));
+  k.stdin.end(args.join(' ') + ' ' + additionalArgs.join(' '));
   
   return k;
 };
