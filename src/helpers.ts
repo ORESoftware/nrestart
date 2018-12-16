@@ -1,7 +1,7 @@
 'use strict';
 
 import * as cp from 'child_process';
-import * as procs from './procs';
+import {deadProcs, toBeKilled} from './procs';
 import {ChildProcess} from 'child_process';
 import * as async from 'async';
 import chalk from 'chalk';
@@ -11,15 +11,15 @@ export type EVCb<T> = (err: any, val?: T) => void;
 
 export const killProcess = (proc: ChildProcess, cb: EVCb<any>) => {
   
-  if (procs.deadProcs.has(proc)) {
+  if (deadProcs.has(proc)) {
     return process.nextTick(cb);
   }
   
-  if (procs.toBeKilled.has(proc)) {
+  if (toBeKilled.has(proc)) {
     return process.nextTick(cb);
   }
   
-  procs.toBeKilled.add(proc);
+  toBeKilled.add(proc);
   
   const kill = () => {
     
@@ -27,12 +27,12 @@ export const killProcess = (proc: ChildProcess, cb: EVCb<any>) => {
     
     setTimeout(() => {
       
-      if (procs.deadProcs.has(proc)) {
+      if (deadProcs.has(proc)) {
         return cb(null, null);
       }
       
       setTimeout(() => {
-        if (!procs.deadProcs.has(proc)) {
+        if (!deadProcs.has(proc)) {
           proc.kill('SIGKILL');
         }
         cb(null, null);

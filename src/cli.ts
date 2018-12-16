@@ -2,7 +2,7 @@
 'use strict';
 
 import * as cp from 'child_process';
-import * as procs from './procs';
+import {deadProcs, toBeKilled} from './procs';
 import {killProcess} from './helpers';
 import log from './logger';
 
@@ -42,7 +42,7 @@ const startProcess = () => {
   });
   
   k.once('exit', code => {
-    procs.deadProcs.add(k);
+    deadProcs.add(k);
   });
   
   // k.stdout.pipe(process.stdout);
@@ -59,7 +59,7 @@ const container = {
 
 process.stdin.resume().on('data', d => {
   
-  const cmd = String(d).trim().toLowerCase();
+  const cmd = String(d || '').trim().toLowerCase();
   
   if (cmd === 'exit1') {
     

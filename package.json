@@ -1,5 +1,5 @@
 {
-  "name": "typescript-library-skeleton",
+  "name": "nrestart",
   "version": "0.0.1001",
   "description": "Semver-oriented TypeScript library skeleton.",
   "main": "dist/index.js",
